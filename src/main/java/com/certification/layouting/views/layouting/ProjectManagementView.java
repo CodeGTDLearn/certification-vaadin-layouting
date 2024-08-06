@@ -1,8 +1,8 @@
 package com.certification.layouting.views.layouting;
 
-import com.certification.layouting.views.layouting.project_solution.views.DashboardView;
-import com.certification.layouting.views.layouting.project_solution.views.ProjectListView;
-import com.certification.layouting.views.layouting.project_solution.views.TaskView;
+import com.certification.layouting.views.layouting.solution.DashboardView;
+import com.certification.layouting.views.layouting.solution.ProjectListView;
+import com.certification.layouting.views.layouting.solution.TaskView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.html.H2;
@@ -11,8 +11,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
 
 @Route("")
-public class ProjectManagementMainView extends AppLayout {
-  public ProjectManagementMainView() {
+public class ProjectManagementView extends AppLayout {
+  public ProjectManagementView() {
 
     addToNavbar(
          new DrawerToggle(),

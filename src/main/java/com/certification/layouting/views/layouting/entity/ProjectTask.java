@@ -1,4 +1,4 @@
-package com.certification.layouting.views.layouting.project_solution.entity;
+package com.certification.layouting.views.layouting.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
-package com.certification.layouting.views.layouting.project_solution.views;
+package com.certification.layouting.views.layouting.solution;
 
-import com.certification.layouting.views.layouting.ProjectManagementMainView;
-import com.certification.layouting.views.layouting.project_solution.entity.ProjectTask;
+import com.certification.layouting.views.layouting.ProjectManagementView;
+import com.certification.layouting.views.layouting.entity.ProjectTask;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 import static com.vaadin.flow.component.icon.VaadinIcon.CHECK;
 
-@Route(value = "tasks", layout = ProjectManagementMainView.class)
+@Route(value = "tasks", layout = ProjectManagementView.class)
 public class TaskView extends VerticalLayout {
 
   private Grid<ProjectTask> taskGrid;
@@ -41,15 +41,15 @@ public class TaskView extends VerticalLayout {
 
   private void createFilters() {
 
-    projectFilter = new ComboBox<>("Projeto");
-    projectFilter.setItems("Todos", "Projeto A", "Projeto B", "Projeto C");
-    projectFilter.setValue("Todos");
-    projectFilter.addValueChangeListener(e -> updateList());
+    projectFilter = new ComboBox<>("Project");
+    projectFilter.setItems("All", "Project A", "Project B", "Project C");
+    projectFilter.setValue("All");
+    projectFilter.addValueChangeListener(e -> mockedDatasourceUpdateList());
 
     statusFilter = new ComboBox<>("Status");
-    statusFilter.setItems("Todos", "Pendente", "Em andamento", "Concluído");
-    statusFilter.setValue("Todos");
-    statusFilter.addValueChangeListener(e -> updateList());
+    statusFilter.setItems("All", "Working on", "On going", "Concluded");
+    statusFilter.setValue("All");
+    statusFilter.addValueChangeListener(e -> mockedDatasourceUpdateList());
   }
 
   private void createTaskGrid() {
@@ -60,53 +60,54 @@ public class TaskView extends VerticalLayout {
 
     taskGrid
          .getColumnByKey("name")
-         .setHeader("Tarefa");
+         .setHeader("Task");
 
     taskGrid.getColumnByKey("project")
-            .setHeader("Projeto");
+            .setHeader("Project");
 
     taskGrid.getColumnByKey("assignedTo")
-            .setHeader("Responsável");
+            .setHeader("Responsible");
 
     taskGrid.getColumnByKey("dueDate")
-            .setHeader("Prazo");
+            .setHeader("Deadline");
 
     taskGrid.getColumnByKey("status")
             .setHeader("Status");
 
     taskGrid
          .addColumn(task -> {
-           Button completeButton = new Button("Concluir", new Icon(CHECK));
+           Button completeButton = new Button("Finish", new Icon(CHECK));
 
            completeButton.addClickListener(e -> completeTask(task));
            return completeButton;
          })
-         .setHeader("Ações");
+         .setHeader("Actions");
 
-    updateList();
+    mockedDatasourceUpdateList();
   }
 
-  private void updateList() {
-    // Aqui você normalmente buscaria os dados do seu backend
-    // Para este exemplo, vamos criar algumas tarefas de exemplo
+  // Aqui você normalmente buscaria os dados do seu backend
+  // Para este exemplo, vamos criar algumas tarefas de exemplo
+  private void mockedDatasourceUpdateList() {
+
     final ProjectTask mockProjectTask1 =
-         new ProjectTask("Tarefa 1",
-                         "Projeto A",
-                         "João",
+         new ProjectTask("Task 1",
+                         "Project A",
+                         "Jonh",
                          LocalDate.now()
                                   .plusDays(7),
-                         "Pendente"
+                         "On going"
          );
 
     final ProjectTask mockProjectTask2 =
          new ProjectTask(
-              "Tarefa 2",
-              "Projeto B",
-              "Maria",
+              "Task 2",
+              "Project B",
+              "Mary",
               LocalDate.now()
                        .plusDays(
                             3),
-              "Em andamento"
+              "On going"
          );
 
 
@@ -114,19 +115,25 @@ public class TaskView extends VerticalLayout {
 
 
     if (! projectFilter.getValue()
-                       .equals("Todos")) {
-      tasks = tasks.stream()
-                   .filter(task ->
-                                task.getProject().equals(projectFilter.getValue()))
-                   .collect(Collectors.toList());
+                       .equals("All")) {
+      tasks =
+           tasks
+                .stream()
+                .filter(task ->
+                             task.getProject()
+                                 .equals(projectFilter.getValue()))
+                .collect(Collectors.toList());
     }
 
     if (! statusFilter.getValue()
-                      .equals("Todos")) {
-      tasks = tasks.stream()
-                   .filter(task ->
-                                task.getStatus().equals(statusFilter.getValue()))
-                   .collect(Collectors.toList());
+                      .equals("All")) {
+      tasks =
+           tasks
+                .stream()
+                .filter(task ->
+                             task.getStatus()
+                                 .equals(statusFilter.getValue()))
+                .collect(Collectors.toList());
     }
 
     taskGrid.setItems(tasks);
@@ -134,8 +141,8 @@ public class TaskView extends VerticalLayout {
 
   private void completeTask(ProjectTask task) {
     // Lógica para marcar uma tarefa como concluída
-    Notification.show("Tarefa concluída: " + task.getName(), 3000, Notification.Position.MIDDLE);
-    task.setStatus("Concluído");
+    Notification.show("Concluded TAsk: " + task.getName(), 3000, Notification.Position.MIDDLE);
+    task.setStatus("Concluded");
     taskGrid.getDataProvider()
             .refreshItem(task);
   }

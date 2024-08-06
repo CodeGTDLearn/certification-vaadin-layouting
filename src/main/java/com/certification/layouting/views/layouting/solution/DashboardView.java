@@ -1,6 +1,6 @@
-package com.certification.layouting.views.layouting.project_solution.views;
+package com.certification.layouting.views.layouting.solution;
 
-import com.certification.layouting.views.layouting.ProjectManagementMainView;
+import com.certification.layouting.views.layouting.ProjectManagementView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H2;
@@ -16,7 +16,9 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.OptionalParameter;
 import com.vaadin.flow.router.Route;
 
-@Route(value = "dashboard", layout = ProjectManagementMainView.class)
+import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.*;
+
+@Route(value = "dashboard", layout = ProjectManagementView.class)
 public class DashboardView extends VerticalLayout implements HasUrlParameter<String> {
 
   private HorizontalLayout projectSummary;
@@ -41,7 +43,7 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     header.setWidthFull();
     header.setHeight("80px");
     header.setClassName("dashboard-header");
-    header.setAlignItems(Alignment.CENTER);
+    header.setAlignItems(CENTER);
     header.setPadding(true);
 
     H2 title = new H2("Dashboard");
@@ -94,9 +96,9 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     stats.setJustifyContentMode(JustifyContentMode.BETWEEN);
 
     stats.add(
-         createStatItem("Active Projects", "10"),
-         createStatItem("Ongoing Projects", "25"),
-         createStatItem("Concluded Projects", "5")
+         createStatItem("Active", "10"),
+         createStatItem("Ongoing", "25"),
+         createStatItem("Concluded", "5")
     );
 
     summaryLayout.add(stats);
@@ -108,7 +110,7 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     VerticalLayout statItem = new VerticalLayout();
     statItem.setSpacing(false);
     statItem.setPadding(false);
-    statItem.setAlignItems(Alignment.CENTER);
+    statItem.setAlignItems(CENTER);
 
     H2 statValue = new H2(value);
     Span statLabel = new Span(label);
@@ -123,7 +125,7 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     taskListLayout.setHeightFull();
     taskListLayout.setClassName("task-list-card");
 
-    H3 taskListTitle = new H3("Recente Tasks");
+    H3 taskListTitle = new H3("Recent Tasks");
     taskListLayout.add(taskListTitle);
 
     for (int i = 1; i <= 5; i++) {
@@ -137,7 +139,7 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
 
     HorizontalLayout taskItem = new HorizontalLayout();
     taskItem.setWidthFull();
-    taskItem.setAlignItems(Alignment.CENTER);
+    taskItem.setAlignItems(CENTER);
 
     Checkbox taskCheckbox = new Checkbox(taskName);
     Span projectLabel = new Span(projectName);
@@ -154,7 +156,7 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     footer.setWidthFull();
     footer.setHeight("50px");
     footer.setClassName("dashboard-footer");
-    footer.setAlignItems(Alignment.CENTER);
+    footer.setAlignItems(CENTER);
     footer.setJustifyContentMode(JustifyContentMode.CENTER);
 
     footer.add(new Span("© 2024 Project Management Software"));
@@ -164,6 +166,6 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
 
   @Override
   public void setParameter(BeforeEvent event, @OptionalParameter String parameter) {
-    // Implementação para lidar com parâmetros de URL, se necessário
+
   }
 }
