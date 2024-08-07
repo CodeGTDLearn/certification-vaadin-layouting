@@ -1,7 +1,7 @@
-package com.certification.layouting.views.layouting.solution;
+package com.certification.layouting.practice_project.project;
 
-import com.certification.layouting.views.layouting.ProjectManagementView;
-import com.certification.layouting.views.layouting.entity.Project;
+import com.certification.layouting.practice_project.MainView;
+import com.certification.layouting.practice_project.config.MockedDataSource;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.Icon;
@@ -11,15 +11,14 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.certification.layouting.practice_project.config.AppRoutes.PROJECT_ROUTE;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
 import static java.time.LocalDate.now;
 
-@Route(value = "projects", layout = ProjectManagementView.class)
+@Route(value = PROJECT_ROUTE, layout = MainView.class)
 public class ProjectListView extends VerticalLayout {
   private Grid<Project> projectGrid;
   private TextField filterField;
@@ -42,7 +41,7 @@ public class ProjectListView extends VerticalLayout {
     filterField = new TextField();
     filterField.setPlaceholder("Filter by name...");
     filterField.setClearButtonVisible(true);
-    filterField.addValueChangeListener(e -> mockedDatasourceUpdateList());
+    filterField.addValueChangeListener(e -> fetchList());
 
     Button addButton = new Button("Add Project", new Icon(PLUS));
     addButton.addClickListener(e -> addProject());
@@ -72,33 +71,14 @@ public class ProjectListView extends VerticalLayout {
                     })
                .setHeader("Actions");
 
-    mockedDatasourceUpdateList();
+    fetchList();
   }
 
   // Aqui você normalmente buscaria os dados do seu backend
   // Para este exemplo, vamos criar alguns projetos de exemplo
-  private void mockedDatasourceUpdateList() {
+  private void fetchList() {
 
-    List<Project> projects = Arrays.asList(
-         new Project(
-              "Project A",
-              now(),
-              now().plusMonths(3),
-              "On going"
-         ),
-         new Project(
-              "Project B",
-              now().minusMonths(1),
-              now().plusMonths(2),
-              "On going"
-         ),
-         new Project(
-              "Project C",
-              now().plusMonths(1),
-              now().plusMonths(6),
-              "Planned"
-         )
-    );
+    var projects = MockedDataSource.mockedProjectList;
 
     if (filterField.getValue() != null && ! filterField.getValue()
                                                        .isEmpty()) {
@@ -109,7 +89,6 @@ public class ProjectListView extends VerticalLayout {
                                                                         .toLowerCase()))
                          .collect(Collectors.toList());
     }
-
     projectGrid.setItems(projects);
   }
 

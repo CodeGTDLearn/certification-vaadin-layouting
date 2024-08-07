@@ -1,6 +1,6 @@
-package com.certification.layouting.views.layouting.solution;
+package com.certification.layouting.practice_project.dashboard;
 
-import com.certification.layouting.views.layouting.ProjectManagementView;
+import com.certification.layouting.practice_project.MainView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H2;
@@ -11,14 +11,13 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.BeforeEvent;
-import com.vaadin.flow.router.HasUrlParameter;
-import com.vaadin.flow.router.OptionalParameter;
-import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.*;
 
+import static com.certification.layouting.practice_project.config.AppRoutes.DASHBOARD_ROUTE;
 import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.*;
 
-@Route(value = "dashboard", layout = ProjectManagementView.class)
+@Route(value = DASHBOARD_ROUTE, layout = MainView.class)
+@RouteAlias(value = "", layout = MainView.class)
 public class DashboardView extends VerticalLayout implements HasUrlParameter<String> {
 
   private HorizontalLayout projectSummary;

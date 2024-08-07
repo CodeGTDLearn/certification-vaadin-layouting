@@ -1,7 +1,7 @@
-package com.certification.layouting.views.layouting.solution;
+package com.certification.layouting.practice_project.projecttask;
 
-import com.certification.layouting.views.layouting.ProjectManagementView;
-import com.certification.layouting.views.layouting.entity.ProjectTask;
+import com.certification.layouting.practice_project.MainView;
+import com.certification.layouting.practice_project.config.MockedDataSource;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.Grid;
@@ -11,21 +11,19 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 
-import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.certification.layouting.practice_project.config.AppRoutes.PROJECT_TASK_ROUTE;
 import static com.vaadin.flow.component.icon.VaadinIcon.CHECK;
 
-@Route(value = "tasks", layout = ProjectManagementView.class)
-public class TaskView extends VerticalLayout {
+@Route(value = PROJECT_TASK_ROUTE, layout = MainView.class)
+public class ProjectTaskView extends VerticalLayout {
 
   private Grid<ProjectTask> taskGrid;
   private ComboBox<String> projectFilter;
   private ComboBox<String> statusFilter;
 
-  public TaskView() {
+  public ProjectTaskView() {
 
     setSizeFull();
     setPadding(true);
@@ -86,33 +84,9 @@ public class TaskView extends VerticalLayout {
     mockedDatasourceUpdateList();
   }
 
-  // Aqui você normalmente buscaria os dados do seu backend
-  // Para este exemplo, vamos criar algumas tarefas de exemplo
   private void mockedDatasourceUpdateList() {
 
-    final ProjectTask mockProjectTask1 =
-         new ProjectTask("Task 1",
-                         "Project A",
-                         "Jonh",
-                         LocalDate.now()
-                                  .plusDays(7),
-                         "On going"
-         );
-
-    final ProjectTask mockProjectTask2 =
-         new ProjectTask(
-              "Task 2",
-              "Project B",
-              "Mary",
-              LocalDate.now()
-                       .plusDays(
-                            3),
-              "On going"
-         );
-
-
-    List<ProjectTask> tasks = Arrays.asList(mockProjectTask1, mockProjectTask2);
-
+    var tasks = MockedDataSource.mockedProjectTaskList;
 
     if (! projectFilter.getValue()
                        .equals("All")) {
