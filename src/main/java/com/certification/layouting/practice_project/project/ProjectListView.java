@@ -11,17 +11,18 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.certification.layouting.practice_project.config.AppRoutes.PROJECT_ROUTE;
 import static com.vaadin.flow.component.icon.VaadinIcon.EDIT;
 import static com.vaadin.flow.component.icon.VaadinIcon.PLUS;
-import static java.time.LocalDate.now;
 
 @Route(value = PROJECT_ROUTE, layout = MainView.class)
 public class ProjectListView extends VerticalLayout {
-  private Grid<Project> projectGrid;
-  private TextField filterField;
+
+  private Grid<Project> projectGrid = new Grid<>(Project.class);
+  private TextField filterProjectField = new TextField();
 
   public ProjectListView() {
 
@@ -29,78 +30,100 @@ public class ProjectListView extends VerticalLayout {
     setPadding(true);
     setSpacing(true);
 
-    createToolbar();
-    createProjectGrid();
+    var toolbar = new HorizontalLayout();
+    toolbar.add(filterProjectField, addProjectButton());
 
-    add(filterField, projectGrid);
+    setFilterProjectField();
+    setProjectGrid(findProjectsByFilter(filterProjectField.getValue()
+                                                          .toLowerCase()));
+
+    add(toolbar, filterProjectField, projectGrid);
   }
 
-  private void createToolbar() {
+  private void setFilterProjectField() {
 
-    HorizontalLayout toolbar = new HorizontalLayout();
-    filterField = new TextField();
-    filterField.setPlaceholder("Filter by name...");
-    filterField.setClearButtonVisible(true);
-    filterField.addValueChangeListener(e -> fetchList());
+    filterProjectField.setPlaceholder("Filter by name...");
+    filterProjectField.setClearButtonVisible(true);
+    filterProjectField
+         .addValueChangeListener(
+              e -> {
+                var projects =
+                     findProjectsByFilter(
+                          filterProjectField.getValue()
+                                            .toLowerCase());
 
-    Button addButton = new Button("Add Project", new Icon(PLUS));
-    addButton.addClickListener(e -> addProject());
+                projectGrid.setItems(projects);
+              });
 
-    toolbar.add(filterField, addButton);
-    add(toolbar);
   }
 
-  private void createProjectGrid() {
+  private void setProjectGrid(List<Project> projects) {
 
-    projectGrid = new Grid<>(Project.class);
     projectGrid.setColumns("name", "startDate", "endDate", "status");
-    projectGrid.getColumnByKey("name")
-               .setHeader("Project Name");
-    projectGrid.getColumnByKey("startDate")
-               .setHeader("Start Date");
-    projectGrid.getColumnByKey("endDate")
-               .setHeader("End Date");
-    projectGrid.getColumnByKey("status")
-               .setHeader("Status");
 
-    projectGrid.addColumn(
-                    project -> {
-                      var button = new Button("Edit", new Icon(EDIT));
-                      button.addClickListener(e -> editProject(project));
-                      return button;
-                    })
-               .setHeader("Actions");
+    projectGrid
+         .getColumnByKey("name")
+         .setHeader("Project");
 
-    fetchList();
-  }
+    projectGrid
+         .getColumnByKey("startDate")
+         .setHeader("Start Date");
 
-  // Aqui você normalmente buscaria os dados do seu backend
-  // Para este exemplo, vamos criar alguns projetos de exemplo
-  private void fetchList() {
+    projectGrid
+         .getColumnByKey("endDate")
+         .setHeader("End Date");
 
-    var projects = MockedDataSource.mockedProjectList;
+    projectGrid
+         .getColumnByKey("status")
+         .setHeader("Status");
 
-    if (filterField.getValue() != null && ! filterField.getValue()
-                                                       .isEmpty()) {
-      projects = projects.stream()
-                         .filter(project -> project.getName()
-                                                   .toLowerCase()
-                                                   .contains(filterField.getValue()
-                                                                        .toLowerCase()))
-                         .collect(Collectors.toList());
-    }
+    projectGrid
+         .addComponentColumn(this::editProjectButton)
+         .setHeader("Actions");
+
     projectGrid.setItems(projects);
   }
 
-  private void addProject() {
+  private List<Project> findProjectsByFilter(String criteria) {
 
-    final String text = "Addition Project Functionality not implemented yet";
-    Notification.show(text, 3000, Notification.Position.MIDDLE);
+    var filteredProjects = MockedDataSource.projectList;
+
+    if (criteria != null && ! criteria.isEmpty()) {
+      filteredProjects = filteredProjects
+           .stream()
+           .filter(
+                project ->
+                     project
+                          .getName()
+                          .toLowerCase()
+                          .contains(criteria))
+           .collect(Collectors.toList());
+    }
+
+    return filteredProjects;
   }
 
-  private void editProject(Project project) {
+  private Button addProjectButton() {
 
-    final String text = "Updating project: " + project.getName();
-    Notification.show(text, 3000, Notification.Position.MIDDLE);
+    var button = new Button("Add Project", new Icon(PLUS));
+
+    button.addClickListener(e -> {
+      final String text = "Addition Project Functionality not implemented yet";
+      Notification.show(text, 3000, Notification.Position.MIDDLE);
+    });
+
+    return button;
+  }
+
+  private Button editProjectButton(Project project) {
+
+    var button = new Button("Edit", new Icon(EDIT));
+
+    button.addClickListener(e -> {
+      final String text = "Updating project: " + project.getName();
+      Notification.show(text, 3000, Notification.Position.MIDDLE);
+    });
+
+    return button;
   }
 }
