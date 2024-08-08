@@ -1,4 +1,4 @@
-package com.certification.layouting.practice_project.dashboard;
+package com.certification.layouting.practice_project.projectOverview;
 
 import com.certification.layouting.practice_project.MainView;
 import com.vaadin.flow.component.button.Button;
@@ -18,12 +18,12 @@ import static com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment.*;
 
 @Route(value = DASHBOARD_ROUTE, layout = MainView.class)
 @RouteAlias(value = "", layout = MainView.class)
-public class DashboardView extends VerticalLayout implements HasUrlParameter<String> {
+public class ProjectOverviewView extends VerticalLayout implements HasUrlParameter<String> {
 
   private HorizontalLayout projectSummary;
   private VerticalLayout taskList;
 
-  public DashboardView() {
+  public ProjectOverviewView() {
 
     setSizeFull();
     setPadding(false);
@@ -31,7 +31,7 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
 
     add(
          createHeader(),
-         createMainContent(),
+         createContent(),
          createFooter()
     );
   }
@@ -58,7 +58,21 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     return header;
   }
 
-  private HorizontalLayout createMainContent() {
+  private HorizontalLayout createFooter() {
+
+    HorizontalLayout footer = new HorizontalLayout();
+    footer.setWidthFull();
+    footer.setHeight("50px");
+    footer.setClassName("dashboard-footer");
+    footer.setAlignItems(CENTER);
+    footer.setJustifyContentMode(JustifyContentMode.CENTER);
+
+    footer.add(new Span("© 2024 Project Management Software"));
+
+    return footer;
+  }
+
+  private HorizontalLayout createContent() {
 
     HorizontalLayout mainContent = new HorizontalLayout();
     mainContent.setSizeFull();
@@ -75,11 +89,11 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     taskList.setWidth("300px");
     taskList.setClassName("task-list");
 
-    mainContent.add(createProjectSummary(), createTaskList());
+    mainContent.add(createContent_ProjectSummary(), createContent_RecentTasks(6));
     return mainContent;
   }
 
-  private VerticalLayout createProjectSummary() {
+  private VerticalLayout createContent_ProjectSummary() {
 
     VerticalLayout summaryLayout = new VerticalLayout();
     summaryLayout.setWidthFull();
@@ -90,21 +104,21 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     H3 summaryTitle = new H3("Projects Summary");
     summaryLayout.add(summaryTitle);
 
-    HorizontalLayout stats = new HorizontalLayout();
-    stats.setWidthFull();
-    stats.setJustifyContentMode(JustifyContentMode.BETWEEN);
+    HorizontalLayout ProjectsDataSummary = new HorizontalLayout();
+    ProjectsDataSummary.setWidthFull();
+    ProjectsDataSummary.setJustifyContentMode(JustifyContentMode.BETWEEN);
 
-    stats.add(
-         createStatItem("Active", "10"),
-         createStatItem("Ongoing", "25"),
-         createStatItem("Concluded", "5")
+    ProjectsDataSummary.add(
+         createProjectSummary_StatItem("Active", "10"),
+         createProjectSummary_StatItem("Ongoing", "25"),
+         createProjectSummary_StatItem("Concluded", "5")
     );
 
-    summaryLayout.add(stats);
+    summaryLayout.add(ProjectsDataSummary);
     return summaryLayout;
   }
 
-  private VerticalLayout createStatItem(String label, String value) {
+  private VerticalLayout createProjectSummary_StatItem(String label, String value) {
 
     VerticalLayout statItem = new VerticalLayout();
     statItem.setSpacing(false);
@@ -118,7 +132,7 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     return statItem;
   }
 
-  private VerticalLayout createTaskList() {
+  private VerticalLayout createContent_RecentTasks(int taskQuantity) {
 
     VerticalLayout taskListLayout = new VerticalLayout();
     taskListLayout.setHeightFull();
@@ -127,14 +141,14 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
     H3 taskListTitle = new H3("Recent Tasks");
     taskListLayout.add(taskListTitle);
 
-    for (int i = 1; i <= 5; i++) {
-      taskListLayout.add(createTaskItem("Project " + i, "Task " + i));
+    for (int i = 1; i <= taskQuantity; i++) {
+      taskListLayout.add(createRecentTasks_TaskItem("Project " + i, "Task " + i));
     }
 
     return taskListLayout;
   }
 
-  private HorizontalLayout createTaskItem(String taskName, String projectName) {
+  private HorizontalLayout createRecentTasks_TaskItem(String taskName, String projectName) {
 
     HorizontalLayout taskItem = new HorizontalLayout();
     taskItem.setWidthFull();
@@ -147,20 +161,6 @@ public class DashboardView extends VerticalLayout implements HasUrlParameter<Str
 
     taskItem.add(taskCheckbox, projectLabel);
     return taskItem;
-  }
-
-  private HorizontalLayout createFooter() {
-
-    HorizontalLayout footer = new HorizontalLayout();
-    footer.setWidthFull();
-    footer.setHeight("50px");
-    footer.setClassName("dashboard-footer");
-    footer.setAlignItems(CENTER);
-    footer.setJustifyContentMode(JustifyContentMode.CENTER);
-
-    footer.add(new Span("© 2024 Project Management Software"));
-
-    return footer;
   }
 
   @Override
